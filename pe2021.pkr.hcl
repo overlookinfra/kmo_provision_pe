@@ -9,17 +9,18 @@ packer {
 
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
-source "googlecompute" "cd4pe5" {
+source "googlecompute" "pe2021" {
   image_labels = {
     created = "${local.timestamp}"
   }
-  image_name          = "cd4pe5-${local.timestamp}"
-  instance_name       = "cd4pe5-${local.timestamp}"
+  image_name          = "pe2021-${local.timestamp}"
+  instance_name       = "pe2021-${local.timestamp}"
   machine_type        = "e2-standard-8"
   project_id          = "kmo-instruqt"
-  image_family        = "cd4pe5"
-  source_image_family = "ubuntu-2004-lts"
-  ssh_username        = "ubuntu"
+  image_family        = "pe2021"
+  source_image_family = "rocky-linux-8"
+  # Set ssh_username to the username you use to connect to your instance. Can it be root?
+  ssh_username        = "root"
   zone                = "us-west1-b"
 }
 
@@ -32,7 +33,7 @@ build {
   }
 
   provisioner "shell" {
-    execute_command  = "echo 'ubuntu' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
+    execute_command  = "echo 'root' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
     script           = "./bootstrap_scripts/bootstrap.sh"
     valid_exit_codes = [0, 2, 4, 6]
   }
