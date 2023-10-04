@@ -2,8 +2,17 @@
 
 set -x
 
+# Prepare /etc/hosts
+sudo sed -i '/^127\.0\.0\.1/ s/$/ puppet/' /etc/hosts
+sudo sed -i '/^::1/ s/$/ puppet/' /etc/hosts
+sudo sed -i 's/\(^[0-9.]*\).*\.c\.kmo-instruqt\.internal/\1 puppet.c.kmo-instruqt.internal/' /etc/hosts
+sudo sed -i 's/\(puppet\.c\.kmo-instruqt\.internal\).*/\1 puppet/' /etc/hosts
+
+
 #Change the hostname to the FQDN of the master
 sudo hostnamectl set-hostname puppet
+
+
 # Install dependencies
 sudo dnf update -y
 #change directories to /tmp
