@@ -24,7 +24,12 @@ sudo tar -xvf puppet-enterprise-2021.7.5-el-8-x86_64.tar.gz
 #install puppet enterprise
 sudo ./puppet-enterprise-2021.7.5-el-8-x86_64/puppet-enterprise-installer -c /tmp/puppet-enterprise-2021.7.5-el-8-x86_64/conf.d/pe.conf
 
-puppet infrastructure console_password --password 'puppetlabs'
+#Need to run puppet agent as root twice to get the cert signed
+sudo /opt/puppetlabs/bin/puppet agent -t
+sudo /opt/puppetlabs/bin/puppet agent -t
+
+
+sudo puppet infrastructure console_password --password 'puppetlabs'
 
 
 

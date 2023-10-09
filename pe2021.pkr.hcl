@@ -17,9 +17,10 @@ source "googlecompute" "pe2021" {
   instance_name       = "pe2021-${local.timestamp}"
   machine_type        = "e2-standard-8"
   project_id          = "kmo-instruqt"
+  # What is the purpose of the image_family? Is it just a tag?
   image_family        = "pe2021"
   source_image_family = "rocky-linux-8"
-  # Set ssh_username to the username you use to connect to your instance. Can it be root?
+  # Set ssh_username to the username you use to connect to your instance. Can it be root? And then create a user in the bootstrap script?
   ssh_username        = "root"
   zone                = "us-west1-b"
 }
