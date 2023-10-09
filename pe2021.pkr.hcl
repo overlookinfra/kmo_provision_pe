@@ -19,7 +19,6 @@ source "googlecompute" "pe2021" {
   project_id          = "kmo-instruqt"
   image_family        = "pe2021"
   source_image_family = "rocky-linux-8-optimized-gcp"
-  # Set ssh_username to the username you use to connect to your instance. Can it be root? And then create a user in the bootstrap script?
   ssh_username        = "peinstaller"
   zone                = "us-west1-b"
 }
