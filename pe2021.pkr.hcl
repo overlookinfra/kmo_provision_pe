@@ -24,7 +24,7 @@ source "googlecompute" "pe2021" {
 }
 
 build {
-  sources = ["source.googlecompute.cd4pe5"]
+  sources = ["source.googlecompute.pe2021"]
 
   provisioner "file" {
     destination = "/tmp/resources"
