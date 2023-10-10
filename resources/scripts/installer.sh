@@ -27,8 +27,17 @@ sudo ./puppet-enterprise-2021.7.5-el-8-x86_64/puppet-enterprise-installer -c /tm
 sudo /opt/puppetlabs/bin/puppet agent -t
 sudo /opt/puppetlabs/bin/puppet agent -t
 
+#Switch to root
+sudo su
 
-sudo puppet infrastructure console_password --password 'puppetlabs'
+#Set the console password
+puppet infrastructure console_password --password 'puppetlabs'
+
+#Switch back to previous user
+exit
+
+#Run puppet agent as root again to get the password change picked up
+sudo /opt/puppetlabs/bin/puppet agent -t
 
 
 
