@@ -13,8 +13,7 @@ sudo sed -i 's/\(puppet\.c\.kmo-instruqt\.internal\).*/\1 puppet/' /etc/hosts
 sudo hostnamectl set-hostname puppet
 
 
-# Install dependencies
-sudo dnf update -y
+
 #change directories to /tmp
 cd /tmp
 #Download Puppet Enterprise 2021.7.5
