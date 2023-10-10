@@ -28,7 +28,7 @@ sudo /opt/puppetlabs/bin/puppet agent -t
 sudo /opt/puppetlabs/bin/puppet agent -t
 
 #Switch to root
-sudo su
+sudo -i
 
 #Set the console password
 puppet infrastructure console_password --password 'puppetlabs'
