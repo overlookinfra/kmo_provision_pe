@@ -3,7 +3,7 @@
 set -x
 
 # Move the installer to $HOME to satisfy Bolt
-target_dir="$HOME/pe_2021_install"
+target_dir="$HOME/peinstaller"
 mkdir $target_dir
 rsync --recursive /tmp/resources/ $target_dir
 
