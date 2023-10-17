@@ -35,7 +35,24 @@ sudo /opt/puppetlabs/bin/puppet infrastructure console_password --password 'pupp
 #Run puppet agent as root again to get the password change picked up
 sudo /opt/puppetlabs/bin/puppet agent -t
 
+x=15
 
+start=$(date +%s)
+
+echo "Waiting for Puppet Agent lockfile to be removed"
+
+until [ ! -f /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock ]
+do
+  echo "Lock file found; sleeping $x seconds"
+     sleep $x
+done
+
+finish=$(date +%s)
+totalTime=$((buildEnd-buildStart))
+
+echo "Lock file cleared after $totalTime seconds"
+
+exit 0
 
 
 
