@@ -43,3 +43,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Ignore build logs
+logs/*.log
+logs/*.txt
