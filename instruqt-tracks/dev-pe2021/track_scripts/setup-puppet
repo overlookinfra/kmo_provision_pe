@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+
+# Do not use -e option here because puppet agent returns non-zero
+# exit code when it successfully applies changes to the machine
+set -uo pipefail
+
+buildStart=$(date +%s)
+
+# Convert seconds to HH:MM:SS
+# -- https://stackoverflow.com/questions/12199631/convert-seconds-to-hours-minutes-seconds
+convertsecs() {
+ ((h=${1}/3600))
+ ((m=(${1}%3600)/60))
+ ((s=${1}%60))
+ printf "%02d hours, %02d minutes, %02d seconds\n" $h $m $s
+}
+
+echo "Waiting for Instruqt to finish booting the VM"
+timeout=$(date -d '+300seconds' +%s)
+status=0
+until [[ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]] 
+do
+
+  if [[ $timeout -lt $(date +%s) ]]
+  then
+    echo "Timeout expired!"
+    status=1
+    break
+  fi
+
+  echo "Trying again in 5 seconds..."
+  sleep 5s
+done
+
+if [[ $status == 1 ]] ; then
+  exit 1
+fi
+
+echo "Editing /etc/hosts to include puppet.c.kmo-instruqt.internal after the puppet alias"
+sed -i 's/ puppet  # Added by Google/ puppet puppet.c.kmo-instruqt.internal/' /etc/hosts
+
+echo "Waiting for Puppet Agent to release the lockfile"
+puppetLockStart=$(date +%s)
+timeout=$(date -d '+300seconds' +%s)
+status=0
+interval=30
+until [[ ! -f /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock ]] 
+do
+
+  if [[ $timeout -lt $(date +%s) ]]
+  then
+    echo "Timeout expired!"
+    status=1
+    break
+  fi
+
+  echo "Trying again in $interval seconds..."
+  sleep $interval
+done
+
+if [[ $status == 1 ]] ; then
+  exit 1
+fi
+puppetLockEnd=$(date +%s)
+puppetLockTime=$((puppetLockEnd - puppetLockStart))
+
+echo "Initial Puppet Agent lockfile released after $(convertsecs $puppetLockTime)"
+
+echo "Executing first Puppet Agent run"
+/usr/local/bin/puppet agent -t
+
+echo "Waiting for Puppet Agent to release the lockfile"
+timeout=$(date -d '+300seconds' +%s)
+status=0
+until [[ ! -f /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock ]] 
+do
+
+  if [[ $timeout -lt $(date +%s) ]]
+  then
+    echo "Timeout expired!"
+    status=1
+    break
+  fi
+
+  echo "Trying again in 5 seconds..."
+  sleep 5s
+done
+
+if [[ $status == 1 ]] ; then
+  exit 1
+fi
+
+echo "Executing second Puppet Agent run"
+/usr/local/bin/puppet agent -t
+
+echo "Waiting for Puppet Agent to release the lockfile"
+timeout=$(date -d '+300seconds' +%s)
+status=0
+until [[ ! -f /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock ]] 
+do
+
+  if [[ $timeout -lt $(date +%s) ]]
+  then
+    echo "Timeout expired!"
+    status=1
+    break
+  fi
+
+  echo "Trying again in 5 seconds..."
+  sleep 5s
+done
+
+if [[ $status == 1 ]] ; then
+  exit 1
+fi
+
+buildEnd=$(date +%s)
+buildTime=$((buildEnd-buildStart))
+
+echo "All done!"
+echo "Build completed in $(convertsecs $buildTime)"

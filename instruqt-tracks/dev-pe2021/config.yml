@@ -1,0 +1,7 @@
+version: "3"
+virtualmachines:
+- name: puppet
+  image: kmo-instruqt/pe2021
+  shell: /bin/bash
+  memory: 16384
+  cpus: 16

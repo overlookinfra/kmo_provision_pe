@@ -1,0 +1,16 @@
+slug: dev-pe2021
+id: cyovdmdfutly
+title: DEV-PE2021
+description: Track to test new pe2021.7.5 server for 501 overhaul
+icon: ""
+tags: []
+owner: puppet
+developers:
+- thomas.chisholm@puppet.com
+maintenance: true
+timelimit: 3600
+lab_config:
+  overlay: false
+  width: 33
+  position: right
+checksum: "5138997709747056195"
