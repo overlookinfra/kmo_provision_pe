@@ -26,3 +26,7 @@ sudo /opt/puppetlabs/bin/puppet agent -t
 #Set the console password
 sudo /opt/puppetlabs/bin/puppet infrastructure console_password --password 'puppetlabs'
 
+# Install Bolt too, because it's useful for lab setup
+rockyVer="8"
+sudo rpm -Uvh https://yum.puppet.com/puppet-tools-release-el-$rockyVer.noarch.rpm
+sudo dnf install -y puppet-bolt
